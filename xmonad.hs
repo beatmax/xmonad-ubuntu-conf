@@ -38,7 +38,7 @@ import Data.Ratio ((%))
   simpler parts of xmonad's behavior and are straightforward to tweak.
 -}
 
-myModMask            = mod4Mask       -- changes the mod key to "super"
+myModMask            = mod1Mask       -- changes the mod key to "super"
 myFocusedBorderColor = "#ff0000"      -- color of focused border
 myNormalBorderColor  = "#cccccc"      -- color of inactive border
 myBorderWidth        = 1              -- width of border around windows
@@ -49,7 +49,8 @@ myTerminal           = "gnome-terminal"   -- which terminal software to use
   of text which xmonad is sending to xmobar via the DynamicLog hook.
 -}
 
-myTitleColor     = "#eeeeee"  -- color of window title
+--myTitleColor     = "#eeeeee"  -- color of window title
+myTitleColor     = "green"    -- color of window title
 myTitleLength    = 80         -- truncate window title to this length
 myCurrentWSColor = "#e6744c"  -- color of active workspace
 myVisibleWSColor = "#c185a7"  -- color of inactive workspace
@@ -81,6 +82,7 @@ myUrgentWSRight = "}"
   as well.
 -}
 
+{-
 myWorkspaces =
   [
     "7:Chat",  "8:Dbg", "9:Pix",
@@ -90,6 +92,12 @@ myWorkspaces =
   ]
 
 startupWorkspace = "5:Dev"  -- which workspace do you want to be on after launch?
+-}
+
+myExtraWorkspaces = [(xK_0, "0"),(xK_minus, "-"),(xK_equal, "=")]
+myWorkspaces = ["1","2","3","4","5","6","7","8","9"] ++ (map snd myExtraWorkspaces)
+startupWorkspace = "1"
+
 
 {-
   Layout configuration. In this section we identify which xmonad
@@ -140,12 +148,14 @@ defaultLayouts = smartBorders(avoidStruts(
   -- Grid layout tries to equally distribute windows in the available
   -- space, increasing the number of columns and rows as necessary.
   -- Master window is at top left.
-  ||| Grid))
+  -- ||| Grid
+  ))
 
 
 -- Here we define some layouts which will be assigned to specific
 -- workspaces based on the functionality of that workspace.
 
+{-
 -- We are just running Slack on the chat layout. Full screen it.
 chatLayout = avoidStruts(noBorders Full)
 
@@ -163,6 +173,8 @@ myLayouts =
   onWorkspace "7:Chat" chatLayout
   $ onWorkspace "9:Pix" gimpLayout
   $ defaultLayouts
+-}
+myLayouts = defaultLayouts
 
 
 {-
@@ -194,8 +206,8 @@ myKeyBindings =
     ((myModMask, xK_b), sendMessage ToggleStruts)
     , ((myModMask, xK_a), sendMessage MirrorShrink)
     , ((myModMask, xK_z), sendMessage MirrorExpand)
-    , ((myModMask, xK_p), spawn "synapse")
-    , ((myModMask .|. mod1Mask, xK_space), spawn "synapse")
+--    , ((myModMask, xK_p), spawn "synapse")
+    , ((controlMask, xK_space), spawn "synapse")
     , ((myModMask, xK_u), focusUrgent)
     , ((0, 0x1008FF12), spawn "amixer -q set Master toggle")
     , ((0, 0x1008FF11), spawn "amixer -q set Master 10%-")
@@ -293,6 +305,7 @@ numKeys =
 -- that we are telling xmonad how to navigate workspaces,
 -- how to send windows to different workspaces,
 -- and what keys to use to change which monitor is focused.
+{-
 myKeys = myKeyBindings ++
   [
     ((m .|. myModMask, k), windows $ f i)
@@ -310,6 +323,15 @@ myKeys = myKeyBindings ++
       >>= flip whenJust (windows . f))
       | (key, sc) <- zip [xK_w, xK_e, xK_r] [1,0,2]
       , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]
+  ]
+-}
+myKeys = myKeyBindings ++
+  [
+    ((mod1Mask, key), (windows $ W.greedyView ws))
+    | (key, ws) <- myExtraWorkspaces
+  ] ++ [
+    ((mod1Mask .|. shiftMask, key), (windows $ W.shift ws))
+    | (key, ws) <- myExtraWorkspaces
   ]
 
 
@@ -346,6 +368,7 @@ main = do
         . wrap myVisibleWSLeft myVisibleWSRight
       , ppUrgent = xmobarColor myUrgentWSColor ""
         . wrap myUrgentWSLeft myUrgentWSRight
+      , ppLayout = const "" -- hide layout
     }
   }
     `additionalKeys` myKeys
