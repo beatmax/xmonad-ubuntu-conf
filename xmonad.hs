@@ -43,7 +43,7 @@ mySuperMask          = mod4Mask
 myFocusedBorderColor = "#ff0000"      -- color of focused border
 myNormalBorderColor  = "#cccccc"      -- color of inactive border
 myBorderWidth        = 1              -- width of border around windows
-myTerminal           = "gnome-terminal"   -- which terminal software to use
+myTerminal           = "gnome-terminal --hide-menubar"   -- which terminal software to use
 
 {-
   Xmobar configuration variables. These settings control the appearance
