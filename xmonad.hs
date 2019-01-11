@@ -38,7 +38,8 @@ import Data.Ratio ((%))
   simpler parts of xmonad's behavior and are straightforward to tweak.
 -}
 
-myModMask            = mod1Mask       -- changes the mod key to "super"
+myModMask            = mod1Mask
+mySuperMask          = mod4Mask
 myFocusedBorderColor = "#ff0000"      -- color of focused border
 myNormalBorderColor  = "#cccccc"      -- color of inactive border
 myBorderWidth        = 1              -- width of border around windows
@@ -203,12 +204,11 @@ myLayouts = defaultLayouts
 
 myKeyBindings =
   [
-    ((myModMask, xK_b), sendMessage ToggleStruts)
-    , ((myModMask, xK_a), sendMessage MirrorShrink)
-    , ((myModMask, xK_z), sendMessage MirrorExpand)
---    , ((myModMask, xK_p), spawn "synapse")
-    , ((controlMask, xK_space), spawn "synapse")
-    , ((myModMask, xK_u), focusUrgent)
+    ((mySuperMask, xK_b), sendMessage ToggleStruts)
+    , ((mySuperMask, xK_j), sendMessage MirrorShrink)
+    , ((mySuperMask, xK_k), sendMessage MirrorExpand)
+    , ((mySuperMask, xK_space), spawn "synapse")
+    , ((mySuperMask, xK_u), focusUrgent)
     , ((0, 0x1008FF12), spawn "amixer -q set Master toggle")
     , ((0, 0x1008FF11), spawn "amixer -q set Master 10%-")
     , ((0, 0x1008FF13), spawn "amixer -q set Master 10%+")
