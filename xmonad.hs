@@ -207,12 +207,13 @@ myKeyBindings =
     ((mySuperMask, xK_b), sendMessage ToggleStruts)
     , ((mySuperMask, xK_j), sendMessage MirrorShrink)
     , ((mySuperMask, xK_k), sendMessage MirrorExpand)
-    , ((mySuperMask, xK_space), spawn "synapse")
-    , ((mySuperMask, xK_u), focusUrgent)
+--    , ((mySuperMask, xK_space), spawn "synapse")
+--    , ((mySuperMask, xK_u), focusUrgent)
     , ((0, 0x1008FF12), spawn "amixer -q set Master toggle")
     , ((0, 0x1008FF11), spawn "amixer -q set Master 10%-")
     , ((0, 0x1008FF13), spawn "amixer -q set Master 10%+")
     , ((mod1Mask .|. shiftMask, xK_s), spawn "skypeforlinux")
+    , ((mod1Mask .|. shiftMask, xK_t), spawn "~/local/Telegram/Telegram")
     , ((mod1Mask .|. shiftMask, xK_l), spawn "slock")
   ]
 
@@ -266,8 +267,9 @@ myManagementHooks = [
   , resource =? "stalonetray" --> doIgnore
   , className =? "rdesktop" --> doFloat
   , className =? "Gnome-calculator" --> doFloat
-  , (className =? "Slack") --> doF (W.shift "7:Chat")
-  , (className =? "Gimp-2.8") --> doF (W.shift "9:Pix")
+  , className =? "Runsnake" --> doFloat
+  -- , (className =? "Slack") --> doF (W.shift "7:Chat")
+  -- , (className =? "Gimp-2.8") --> doF (W.shift "9:Pix")
   ]
 
 
